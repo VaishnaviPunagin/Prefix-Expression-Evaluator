@@ -3,8 +3,7 @@
 #include <stdlib.h> 
 #include <stdarg.h> 
 #include "yacc_compile.h" 
-
-// These are the prototypes
+/* prototypes */ 
 nodeType *opr(int oper, int nops, ...); 
 nodeType *id(int i); 
 nodeType *con(int value); 
@@ -12,15 +11,12 @@ void freeNode(nodeType *p);
 int ex(nodeType *p); 
 int yylex(void); 
 void yyerror(char *s); 
-int sym[26]; //this declares the symbol table
-%}
-
-
-%union 
-{ 
-    int iValue; //integer values
-    char sIndex; //index for the symbol table
-    nodeType *nPtr; //node pointer
+int sym[26];                    /* symbol table */ 
+%} 
+%union { 
+    int iValue;                 /* integer value */ 
+    char sIndex;                /* symbol table index */ 
+    nodeType *nPtr;             /* node pointer */ 
 }; 
 %token <iValue> INTEGER 
 %token <sIndex> SYMBOL
@@ -32,59 +28,66 @@ int sym[26]; //this declares the symbol table
 %type <nPtr> prog expr p
 
 %% 
-program: function { exit(0); } ;   
-function: function expr         {printf("%d\n",ex($2));}
-    	  |
-    	  function prog         { ex($2); freeNode($2); } 
-  	  | 
-  	  ;   
-prog:	'[' ';' prog p']'          { $$ = opr(';', 2, $3, $4); }
-     	 | '[' '=' SYMBOL expr ']'          { $$ = opr('=', 2, id($3), $4); }
-	 | '[' ';' WHILE expr prog ']'        { $$ = opr(WHILE, 2, $4, $5); }
-         | '[' ';' IF expr prog prog ']' { $$ = opr(IF, 3, $4, $5, $6); }
-         | '[' RETURN expr ']'                 { $$ = opr(PRINT, 1, $3); }
-         ;
-p: prog p {$$=opr(';',2,$1,$2);}
+program: 
+  function                { exit(0); } 
+  ;   
+function: 
+    function expr         {printf("%d\n",ex($2));}
+    |
+    function prog         { ex($2); freeNode($2); } 
+  | /* NULL */ 
+  ;   
+prog:
+         '[' ';' prog p']'          { $$ = opr(';', 2, $3, $4); }
+        | '[' '=' SYMBOL expr ']'          { $$ = opr('=', 2, id($3), $4); }
+        | '[' ';' WHILE expr prog ']'        { $$ = opr(WHILE, 2, $4, $5); }
+        | '[' ';' IF expr prog prog ']' { $$ = opr(IF, 3, $4, $5, $6); }
+        | '[' RETURN expr ']'                 { $$ = opr(PRINT, 1, $3); }
+        ;
+p: prog p  {$$=opr(';',2,$1,$2);}
    | prog
    ;
-expr: INTEGER               { $$= con($1); } 
-      | SYMBOL              { $$ = id($1); } 
-      | '[' '+' expr expr ']'      { $$ = opr('+', 2, $3,$4); } 
-      | '[' '*' expr expr ']'        { $$ = opr('*', 2, $3, $4); } 
-      | '[' '<' expr expr ']'       { $$ = opr('<', 2, $3, $4); } 
-      | '[' EQ expr expr ']'       { $$ = opr(EQ, 2, $3, $4); } 
-      ;
+expr: 
+    INTEGER               { $$= con($1); } 
+  | SYMBOL              { $$ = id($1); } 
+  | '[' '+' expr expr ']'      { $$ = opr('+', 2, $3,$4); } 
+  | '[' '*' expr expr ']'        { $$ = opr('*', 2, $3, $4); } 
+  | '[' '<' expr expr ']'       { $$ = opr('<', 2, $3, $4); } 
+  | '[' EQ expr expr ']'       { $$ = opr(EQ, 2, $3, $4); } 
+ ;
+
 %% 
-
 #define SIZEOF_NODETYPE ((char *)&p->con - (char *)p) 
-nodeType *con(int value) 
-{ 
+nodeType *con(int value) { 
     nodeType *p; 
-    if ((p = malloc(sizeof(nodeType))) == NULL) //allocating the node
-        yyerror("out of memory"); 
-    //copy the information
-    p->type = typeCon; 
-    p->con.value = value; 
-    return p; 
-} 
-
-nodeType *id(int i) 
-{ 
-    nodeType *p; 
-    //allocating the node
+    /* allocate node */ 
     if ((p = malloc(sizeof(nodeType))) == NULL) 
         yyerror("out of memory"); 
-    //copt the information
-    p->type = typeId; 
-    p->id.i = i; 
+    /* copy information */ 
+    p
+->type = typeCon; 
+    p
+->con.value = value; 
+    return p; 
+} 
+nodeType *id(int i) { 
+    nodeType *p; 
+    /* allocate node */ 
+    if ((p = malloc(sizeof(nodeType))) == NULL) 
+        yyerror("out of memory"); 
+    /* copy information */ 
+    p
+->type = typeId; 
+    p
+->id.i = i; 
     return p; 
 } 
 
-nodeType *opr(int oper, int nops, ...)
-{
+nodeType *opr(int oper, int nops, ...) {
     va_list ap;
     nodeType *p;
     int i;
+
     if ((p = malloc(sizeof(nodeType) + (nops-1) * sizeof(nodeType *))) == NULL)
         yyerror("out of memory");
 
@@ -98,28 +101,24 @@ nodeType *opr(int oper, int nops, ...)
     return p;
 }
 
-void freeNode(nodeType *p)
-{
+void freeNode(nodeType *p) {
     int i;
+
     if (!p) return;
-    if (p->type == typeOpr)
-    {
+    if (p->type == typeOpr) {
         for (i = 0; i < p->opr.nops; i++)
             freeNode(p->opr.op[i]);
     }
     free (p);
 }
 
-void yyerror(char *s)
-{
+void yyerror(char *s) {
     extern char* yytext;
     extern int yylineno;
     fprintf(stdout, "%s\nLine No: %d\nAt char: %c\n", s, yylineno,*yytext);
 }
 
-int main(void) 
-{
+int main(void) {
     yyparse();
     return 0;
 }
-
