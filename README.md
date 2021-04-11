@@ -1,10 +1,10 @@
 # Prefix-Expression-Evaluator
 
-An implementation of a Simple Interpreter for evaluating a given Prefix Expression CGF, using lex and yaac parser.
+An implementation of a Simple Interpreter for evaluating a given Prefix Expression CGF, using lex and yacc parser.
 This is our submission for our Sixth semester CDSS mini project.
 
 ## Building the Interpreter
-Compile the .y (yacc) file(s)
+Compile the .y (yacc) file(s) using:
 
 `yacc -y -d yacc_compile.y`
 
@@ -13,7 +13,7 @@ Compile the .y (yacc) file(s)
 > -y option: A version identification variable is put into y.tab.c. 
 
 
-Compile the .l(lex) file
+Compile the .l(lex) file(s) using:
 
 `lex yacc_compile.l`
 
@@ -26,7 +26,8 @@ And run:
 `./a.out`
 
 Enter a Prefix Expression and the evaluated result shall be displayed as output!
-Head over to the file TestCases for some examples.
+
+Head over to the file TestCases for some examples - a WIP.
 
 # Team Members:
 - Siva Prakash Anupam
