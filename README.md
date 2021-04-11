@@ -4,7 +4,7 @@ An implementation of a Simple Interpreter for evaluating a given Prefix Expressi
 This is our submission for our Sixth semester CDSS mini project.
 
 ## Building the Interpreter
-Compile the .y (yacc) file(s) using:
+1. Compile the .y (yacc) file(s) using:
 
 `yacc -y -d yacc_compile.y`
 
@@ -13,17 +13,20 @@ Compile the .y (yacc) file(s) using:
 > -y option: A version identification variable is put into y.tab.c. 
 
 
-Compile the .l(lex) file(s) using:
+2. Compile the .l(lex) file(s) using:
 
 `lex yacc_compile.l`
 
-Using gcc, now:
+3. Using gcc, now:
 
 `gcc lex.yy.o y.tab.o yacc_compile.c`
 
-And run:
+4. And run:
 
 `./a.out`
+
+
+
 
 Enter a Prefix Expression and the evaluated result shall be displayed as output!
 
