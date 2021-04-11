@@ -17,6 +17,10 @@ This is our submission for our Sixth semester CDSS mini project.
 
 `lex yacc_compile.l`
 
+- To generate the object (.o) files, run:
+
+`gcc -c y.tab.c lex.yy.c`
+
 - Using gcc, now:
 
 `gcc lex.yy.o y.tab.o yacc_compile.c`
