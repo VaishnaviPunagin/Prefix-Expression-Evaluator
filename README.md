@@ -20,15 +20,15 @@ This is our submission for our Sixth semester CDSS mini project.
 
 - To generate the object (.o) files, run:
 
-      `gcc -c y.tab.c lex.yy.c`
+     `gcc -c y.tab.c lex.yy.c`
 
 - Using gcc, now:
 
-      `gcc lex.yy.o y.tab.o yacc_compile.c`
+     `gcc lex.yy.o y.tab.o yacc_compile.c`
 
 - And run:
 
-      `./a.out`
+     `./a.out`
 
 
 
