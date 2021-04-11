@@ -1,42 +1,42 @@
-%{ 
-#include <stdio.h> 
-#include <stdlib.h> 
-#include <stdarg.h> 
-#include "yacc_compile.h" 
-/* prototypes */ 
-nodeType *opr(int oper, int nops, ...); 
-nodeType *id(int i); 
-nodeType *con(int value); 
-void freeNode(nodeType *p); 
-int ex(nodeType *p); 
-int yylex(void); 
-void yyerror(char *s); 
-int sym[26];                    /* symbol table */ 
-%} 
-%union { 
-    int iValue;                 /* integer value */ 
-    char sIndex;                /* symbol table index */ 
-    nodeType *nPtr;             /* node pointer */ 
-}; 
-%token <iValue> INTEGER 
+%{
+#include <stdio.h>
+#include <stdlib.h>
+#include <stdarg.h>
+#include "yacc_compile.h"
+/* prototypes */
+nodeType *opr(int oper, int nops, ...);
+nodeType *id(int i);
+nodeType *con(int value);
+void freeNode(nodeType *p);
+int ex(nodeType *p);
+int yylex(void);
+void yyerror(char *s);
+int sym[26];                    /* symbol table */
+%}
+%union {
+    int iValue;                 /* integer value */
+    char sIndex;                /* symbol table index */
+    nodeType *nPtr;             /* node pointer */
+};
+%token <iValue> INTEGER
 %token <sIndex> SYMBOL
 %token WHILE IF RETURN PRINT
-%left EQ '<' 
-%left '+' 
-%left '*'  
+%left EQ '<'
+%left '+'
+%left '*'
 
 %type <nPtr> prog expr p
 
-%% 
-program: 
-  function                { exit(0); } 
-  ;   
-function: 
+%%
+program:
+  function                { exit(0); }
+  ;
+function:
     function expr         {printf("%d\n",ex($2));}
     |
-    function prog         { ex($2); freeNode($2); } 
-  | /* NULL */ 
-  ;   
+    function prog         { ex($2); freeNode($2); }
+  | /* NULL */
+  ;
 prog:
          '[' ';' prog p']'          { $$ = opr(';', 2, $3, $4); }
         | '[' '=' SYMBOL expr ']'          { $$ = opr('=', 2, id($3), $4); }
@@ -47,41 +47,41 @@ prog:
 p: prog p  {$$=opr(';',2,$1,$2);}
    | prog
    ;
-expr: 
-    INTEGER               { $$= con($1); } 
-  | SYMBOL              { $$ = id($1); } 
-  | '[' '+' expr expr ']'      { $$ = opr('+', 2, $3,$4); } 
-  | '[' '*' expr expr ']'        { $$ = opr('*', 2, $3, $4); } 
-  | '[' '<' expr expr ']'       { $$ = opr('<', 2, $3, $4); } 
-  | '[' EQ expr expr ']'       { $$ = opr(EQ, 2, $3, $4); } 
+expr:
+    INTEGER               { $$= con($1); }
+  | SYMBOL              { $$ = id($1); }
+  | '[' '+' expr expr ']'      { $$ = opr('+', 2, $3,$4); }
+  | '[' '*' expr expr ']'        { $$ = opr('*', 2, $3, $4); }
+  | '[' '<' expr expr ']'       { $$ = opr('<', 2, $3, $4); }
+  | '[' EQ expr expr ']'       { $$ = opr(EQ, 2, $3, $4); }
  ;
 
-%% 
-#define SIZEOF_NODETYPE ((char *)&p->con - (char *)p) 
-nodeType *con(int value) { 
-    nodeType *p; 
-    /* allocate node */ 
-    if ((p = malloc(sizeof(nodeType))) == NULL) 
-        yyerror("out of memory"); 
-    /* copy information */ 
+%%
+#define SIZEOF_NODETYPE ((char *)&p->con - (char *)p)
+nodeType *con(int value) {
+    nodeType *p;
+    /* allocate node */
+    if ((p = malloc(sizeof(nodeType))) == NULL)
+        yyerror("out of memory");
+    /* copy information */
     p
-->type = typeCon; 
+->type = typeCon;
     p
-->con.value = value; 
-    return p; 
-} 
-nodeType *id(int i) { 
-    nodeType *p; 
-    /* allocate node */ 
-    if ((p = malloc(sizeof(nodeType))) == NULL) 
-        yyerror("out of memory"); 
-    /* copy information */ 
+->con.value = value;
+    return p;
+}
+nodeType *id(int i) {
+    nodeType *p;
+    /* allocate node */
+    if ((p = malloc(sizeof(nodeType))) == NULL)
+        yyerror("out of memory");
+    /* copy information */
     p
-->type = typeId; 
+->type = typeId;
     p
-->id.i = i; 
-    return p; 
-} 
+->id.i = i;
+    return p;
+}
 
 nodeType *opr(int oper, int nops, ...) {
     va_list ap;
@@ -119,6 +119,11 @@ void yyerror(char *s) {
 }
 
 int main(void) {
-    yyparse();
-    return 0;
+  printf("======================================================\n");
+  printf("|             Prefix Expresion Evaluator              |\n");
+  printf("|           Submission for CDSS Mini Project           |\n");
+  printf("|                  Using lex and yacc                 |\n");
+  printf("======================================================\n");
+  yyparse();
+  return 0;
 }
