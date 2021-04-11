@@ -6,7 +6,7 @@ This is our submission for our Sixth semester CDSS mini project.
 ## Building the Interpreter
 - Compile the .y (yacc) file(s) using:
 
-      `yacc -y -d yacc_compile.y`
+     `yacc -y -d yacc_compile.y`
 
       
      > -d option:	If this option is used, the file y.tab.h is generated with the define statements that associate the yacc-assigned 'token codes' with the user-declared 'token names'. This allows source files other than y.tab.c to access the token codes.
@@ -16,7 +16,7 @@ This is our submission for our Sixth semester CDSS mini project.
 
 - Compile the .l(lex) file(s) using:
 
-      `lex yacc_compile.l`
+     `lex yacc_compile.l`
 
 - To generate the object (.o) files, run:
 
