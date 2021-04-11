@@ -9,9 +9,9 @@ This is our submission for our Sixth semester CDSS mini project.
       `yacc -y -d yacc_compile.y`
 
       
-      > -d option:	If this option is used, the file y.tab.h is generated with the define statements that associate the yacc-assigned 'token codes' with the user-declared 'token names'. This allows source files other than y.tab.c to access the token codes.
+     > -d option:	If this option is used, the file y.tab.h is generated with the define statements that associate the yacc-assigned 'token codes' with the user-declared 'token names'. This allows source files other than y.tab.c to access the token codes.
 
-      > -y option: A version identification variable is put into y.tab.c. 
+     > -y option: A version identification variable is put into y.tab.c. 
 
 
 - Compile the .l(lex) file(s) using:
