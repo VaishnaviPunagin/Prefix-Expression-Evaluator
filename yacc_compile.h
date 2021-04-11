@@ -1,16 +1,16 @@
 typedef enum { typeCon, typeId, typeOpr } nodeEnum;
 
-/* constants */
+//constants
 typedef struct {
     int value;
 } conNodeType;
 
-/* identifiers */
+//identifiers
 typedef struct {
     int i;
 } idNodeType;
 
-/* operators */
+//operators
 typedef struct {
     int oper;
     int nops;
