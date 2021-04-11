@@ -28,9 +28,9 @@ This is our submission for our Sixth semester CDSS mini project.
 
 
 
-**Enter a Prefix Expression and the evaluated result shall be displayed as output!
+**Enter a Prefix Expression and the evaluated result shall be displayed as output!**
 
-**Head over to the file TestCases for some examples - a WIP.
+**Head over to the file TestCases for some examples - a WIP.**
 
 # Team Members:
 - Siva Prakash Anupam
